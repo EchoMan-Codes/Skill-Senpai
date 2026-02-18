@@ -1,47 +1,42 @@
-# Skill-Senpai 🧭
+💡 Solution
+1. SkillsSenpai analyzes user-selected skills 
+2. Calculates readiness percentage
+3. Identifies missing skills
+4. Generates a learning roadmap
+5. Recommends learning resources
+6. Shows job demand insight
 
-An AI-driven platform for skills gap analysis and personalized learning roadmaps. Built for the modern developer.
+👤 Target Users
+Targeted : Student ,but anyone can use it
+Beginners planning  career
 
-## 🚀 Features
+⚙️ Workflow
+1.Select career role
+2.Select known skills
+3.System compares with dataset
+4.Readiness % calculated
+5.Missing skills displayed
+6.Roadmap + resources suggested
 
-1.  **Skills Gap Analysis**: Visualize your current skills vs. market requirements using interactive radar charts.
-2.  **Personalized Roadmaps**: Step-by-step learning paths tailored to specific job roles.
-3.  **Job Demand Insights**: Real-time data visualization of job market trends.
-4.  **Smart Recommendations**: Curated YouTube channels, videos, and project ideas to bridge your skill gaps.
-5.  **Progress Tracking**: Monitor your learning journey with intuitive dashboards.
+✨ Key Features
+1.Career path guidance
+2.Skill gap detection
+3.Personalized roadmap
+4.Resource recommendations
+5.Progress tracking
+6.Job awareness
 
-## 🛠 Tech Stack
+🏗️ Tech Stack
+1.Frontend: React (Vite), HTML, CSS, JavaScript
+2.Logic: Dataset-based recommendation engine
+3.Storage: LocalStorage / JSON dataset
 
--   **Frontend**: React.js (Vite)
--   **Styling**: Tailwind CSS v4 (with `@tailwindcss/vite` plugin)
--   **Animations**: Framer Motion
--   **Charts**: Recharts
--   **Icons**: Lucide React
--   **Routing**: React Router DOM v6
+📁 Project Structure
 
-## 📂 Project Structure
-
--   `src/pages/Home.jsx`: Landing page with search and feature overview.
--   `src/pages/Dashboard.jsx`: User dashboard with skill radar charts and progress tracking.
--   `src/pages/JobSearch.jsx`: Job search interface with expandable learning roadmaps.
--   `src/pages/PersonalizedLearning.jsx`: Resource feed with YouTube recommendations and project ideas.
--   `src/pages/Login.jsx` & `Signup.jsx`: Authentication pages with glassmorphism UI.
--   `src/components/Navbar.jsx`: Responsive navigation bar.
-
-## 🎨 Design Philosophy
-
--   **Glassmorphism**: Translucent panels and blurs for a premium feel.
--   **Dark Mode**: Deep slate background with vibrant indigo/purple accents.
--   **Micro-interactions**: Hover effects and smooth transitions using Framer Motion.
-
-## 🔧 Setup & Run
-
-1.  Install dependencies:
-    ```bash
-    npm install
-    ```
-2.  Start the development server:
-    ```bash
-    npm run dev
-    ```
-3.  Open [http://localhost:5173](http://localhost:5173) in your browser.
+Skill-Senpai/
+├── public/
+├── src/
+├── index.html
+├── package.json
+├── dataset.json
+└── README.md

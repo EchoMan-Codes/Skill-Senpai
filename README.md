@@ -1,4 +1,4 @@
-# SkillCompass 🧭
+# Skill-Senpai 🧭
 
 An AI-driven platform for skills gap analysis and personalized learning roadmaps. Built for the modern developer.
 

@@ -6,7 +6,7 @@ import { useUser } from '../context/UserContext';
 import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
-    const { userProfile, learningPlan } = useUser();
+    const { userProfile, learningPlan, atsResult } = useUser();
     const [userData, setUserData] = useState([]);
 
     // Use a default state if no profile is found, or redirect
@@ -74,59 +74,95 @@ const Dashboard = () => {
                 {/* Analytics Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-                    {/* Skill Radar Chart */}
+                    {/* ATS Compatibility Engine (Bot Screening Simulation) */}
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.1 }}
-                        className="bg-slate-800/50 backdrop-blur-md rounded-2xl p-6 border border-slate-700 shadow-xl"
+                        className="bg-slate-800/50 backdrop-blur-md rounded-2xl p-6 border border-slate-700 shadow-xl relative overflow-hidden group"
                     >
-                        <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-xl font-semibold flex items-center gap-2">
-                                <TrendingUp className="text-indigo-400" />
-                                Skills Gap Analysis
-                            </h2>
+                        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <Shield className="w-24 h-24 text-indigo-400" />
                         </div>
-                        <div className="h-[300px]">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <RadarChart cx="50%" cy="50%" outerRadius="80%" data={userData}>
-                                    <PolarGrid stroke="#374151" />
-                                    <PolarAngleAxis dataKey="subject" tick={{ fill: '#9CA3AF', fontSize: 12 }} />
-                                    <PolarRadiusAxis angle={30} domain={[0, 150]} tick={false} axisLine={false} />
-                                    <Radar
-                                        name="My Skills"
-                                        dataKey="A"
-                                        stroke="#818cf8"
-                                        strokeWidth={2}
-                                        fill="#818cf8"
-                                        fillOpacity={0.3}
+
+                        <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                            <Shield className="text-indigo-400 w-5 h-5" />
+                            ATS Compatibility Engine
+                        </h2>
+
+                        <div className="flex items-center gap-8 mb-8">
+                            <div className="relative w-32 h-32 flex-shrink-0">
+                                <svg className="w-full h-full transform -rotate-90">
+                                    <circle
+                                        cx="64"
+                                        cy="64"
+                                        r="58"
+                                        stroke="currentColor"
+                                        strokeWidth="8"
+                                        fill="transparent"
+                                        className="text-slate-700"
                                     />
-                                    <Radar
-                                        name="Required"
-                                        dataKey="B"
-                                        stroke="#34d399"
-                                        strokeWidth={2}
-                                        fill="#34d399"
-                                        fillOpacity={0.1}
+                                    <motion.circle
+                                        cx="64"
+                                        cy="64"
+                                        r="58"
+                                        stroke="currentColor"
+                                        strokeWidth="8"
+                                        fill="transparent"
+                                        strokeDasharray={2 * Math.PI * 58}
+                                        initial={{ strokeDashoffset: 2 * Math.PI * 58 }}
+                                        animate={{ strokeDashoffset: 2 * Math.PI * 58 * (1 - (atsResult?.score || 0) / 100) }}
+                                        transition={{ duration: 1.5, ease: "easeOut" }}
+                                        className="text-indigo-500"
+                                        strokeLinecap="round"
                                     />
-                                    <Tooltip
-                                        contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#fff' }}
-                                        itemStyle={{ color: '#fff' }}
-                                    />
-                                </RadarChart>
-                            </ResponsiveContainer>
-                        </div>
-                        <div className="flex justify-center gap-6 mt-4 text-sm">
-                            <div className="flex items-center gap-2">
-                                <div className="w-3 h-3 rounded-full bg-indigo-400" /> My Current Level
+                                </svg>
+                                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                    <span className="text-3xl font-bold">{atsResult?.score || 0}%</span>
+                                    <span className="text-[10px] uppercase text-slate-500 font-bold">Match</span>
+                                </div>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <div className="w-3 h-3 rounded-full bg-emerald-400" /> Required Level
+
+                            <div>
+                                <h3 className="text-lg font-bold text-white mb-1">Bot-Ready Score</h3>
+                                <p className="text-sm text-slate-400 leading-relaxed">
+                                    {atsResult?.analysis || "Analyzing your profile against industry standards..."}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            <div>
+                                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Matched Keywords</h4>
+                                <div className="flex flex-wrap gap-2">
+                                    {atsResult?.matchedKeywords?.map(kw => (
+                                        <span key={kw} className="px-2 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded text-[10px] font-medium uppercase">
+                                            {kw}
+                                        </span>
+                                    ))}
+                                    {(!atsResult?.matchedKeywords || atsResult.matchedKeywords.length === 0) && (
+                                        <span className="text-xs text-slate-500 italic">No keywords detected yet.</span>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Missing Critical Keywords</h4>
+                                <div className="flex flex-wrap gap-2">
+                                    {atsResult?.missingKeywords?.filter(k => k.impact === 'High').map(kw => (
+                                        <span key={kw.name} className="px-2 py-1 bg-red-500/10 text-red-400 border border-red-500/20 rounded text-[10px] font-medium uppercase flex items-center gap-1">
+                                            <Lock className="w-3 h-3" /> {kw.name}
+                                        </span>
+                                    ))}
+                                    {(!atsResult?.missingKeywords || atsResult.missingKeywords.filter(k => k.impact === 'High').length === 0) && (
+                                        <span className="text-xs text-slate-500 italic">Resume is keyword-optimized!</span>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </motion.div>
 
-                    {/* Current Focus / Next Step */}
+                    {/* Skill Gap Intelligence */}
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -134,48 +170,64 @@ const Dashboard = () => {
                         className="bg-slate-800/50 backdrop-blur-md rounded-2xl p-6 border border-slate-700 shadow-xl flex flex-col"
                     >
                         <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
-                            <BookOpen className="text-purple-400" />
-                            Current Focus
+                            <TrendingUp className="text-purple-400" />
+                            Skill Gap Intelligence
                         </h2>
 
-                        {learningPlan.currentFocus ? (
-                            <div className="flex-1 flex flex-col justify-center">
-                                <div className="mb-6">
-                                    <span className="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-bold uppercase tracking-wider mb-2 inline-block">
-                                        Step {learningPlan.currentFocus.step}
-                                    </span>
-                                    <h3 className="text-3xl font-bold text-white mb-2">{learningPlan.currentFocus.skill}</h3>
-                                    <p className="text-slate-400">{learningPlan.currentFocus.description}</p>
-                                </div>
-
-                                <div className="space-y-4">
-                                    <div className="bg-slate-900/50 p-4 rounded-xl border border-slate-700">
-                                        <div className="flex justify-between text-sm text-slate-400 mb-2">
-                                            <span>Estimated Effort</span>
-                                            <span className="text-white">{learningPlan.currentFocus.estimatedHours} Hours</span>
-                                        </div>
-                                        <div className="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
-                                            <div className="bg-indigo-500 h-full w-0" /> {/* Dynamic progress could go here */}
-                                        </div>
-                                    </div>
-
-                                    {learningPlan.currentFocus.resources.length > 0 && (
-                                        <a
-                                            href={learningPlan.currentFocus.resources[0].link}
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            className="w-full block text-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition-colors shadow-lg shadow-indigo-500/20"
-                                        >
-                                            Start Learning Now
-                                        </a>
+                        <div className="space-y-4 flex-1">
+                            {/* Critical Gaps */}
+                            <div className="bg-red-500/5 border border-red-500/20 rounded-xl p-4">
+                                <h3 className="text-red-400 text-sm font-bold flex items-center gap-2 mb-2 uppercase tracking-tight">
+                                    <Lock className="w-4 h-4" /> 🚨 Critical Gaps (High Impact)
+                                </h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {learningPlan.skillsGap.categories.critical.length > 0 ? (
+                                        learningPlan.skillsGap.categories.critical.map(s => (
+                                            <span key={s.name} className="px-3 py-1 bg-red-500/10 text-red-300 rounded-full text-xs border border-red-500/20">{s.name}</span>
+                                        ))
+                                    ) : (
+                                        <span className="text-xs text-slate-500 italic">No critical gaps! You're ready.</span>
                                     )}
                                 </div>
                             </div>
-                        ) : (
-                            <div className="text-center text-slate-500 flex-1 flex flex-col items-center justify-center">
-                                <CheckCircle className="w-16 h-16 mb-4 text-emerald-500" />
-                                <p className="text-lg">You're all caught up!</p>
+
+                            {/* Competitive Gaps */}
+                            <div className="bg-indigo-500/5 border border-indigo-500/20 rounded-xl p-4">
+                                <h3 className="text-indigo-400 text-sm font-bold flex items-center gap-2 mb-2 uppercase tracking-tight">
+                                    <TrendingUp className="w-4 h-4" /> ⚔️ Competitive Advantage
+                                </h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {learningPlan.skillsGap.categories.competitive.length > 0 ? (
+                                        learningPlan.skillsGap.categories.competitive.map(s => (
+                                            <span key={s.name} className="px-3 py-1 bg-indigo-500/10 text-indigo-300 rounded-full text-xs border border-indigo-500/20">{s.name}</span>
+                                        ))
+                                    ) : (
+                                        <span className="text-xs text-slate-500 italic">Core skills complete.</span>
+                                    )}
+                                </div>
                             </div>
+
+                            {/* Trending & Advanced */}
+                            <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-xl p-4">
+                                <h3 className="text-emerald-400 text-sm font-bold flex items-center gap-2 mb-2 uppercase tracking-tight">
+                                    <TrendingUp className="w-4 h-4" /> 📈 Market Trending
+                                </h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {[...learningPlan.skillsGap.categories.trending, ...learningPlan.skillsGap.categories.advanced].length > 0 ? (
+                                        [...learningPlan.skillsGap.categories.trending, ...learningPlan.skillsGap.categories.advanced].map(s => (
+                                            <span key={s.name} className="px-3 py-1 bg-emerald-500/10 text-emerald-300 rounded-full text-xs border border-emerald-500/20">{s.name}</span>
+                                        ))
+                                    ) : (
+                                        <span className="text-xs text-slate-500 italic">Profile up to date.</span>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        {learningPlan.currentFocus && (
+                            <Link to="/learning" className="mt-4 w-full block text-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg transition-colors shadow-lg shadow-indigo-500/20">
+                                View Learning Roadmap
+                            </Link>
                         )}
                     </motion.div>
 

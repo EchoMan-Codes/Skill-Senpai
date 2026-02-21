@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
-import { Compass, Briefcase, Clock, CheckCircle } from 'lucide-react';
-import { roleTemplates } from '../data/roleTemplates';
+import { Compass, Briefcase, Clock, CheckCircle, Shield, Code, Server, Lock } from 'lucide-react';
+import dataset from '../data/dataset.json';
+import { calculateATSScore } from '../utils/atsLogic';
 
 const steps = [
     { id: 1, title: 'Your Goal', icon: Briefcase },
@@ -11,12 +12,14 @@ const steps = [
     { id: 3, title: 'Availability', icon: Clock },
 ];
 
-const availableSkills = [
-    "HTML & CSS", "JavaScript", "React", "Vue", "Angular",
-    "Node.js", "Express.js", "Python", "Django",
-    "Java", "Spring Boot", "SQL", "NoSQL",
-    "Git", "Docker", "AWS", "Tailwind CSS", "TypeScript"
-];
+const RoleIcon = ({ roleId, className }) => {
+    switch (roleId) {
+        case 'frontend-dev': return <Code className={className} />;
+        case 'backend-dev': return <Server className={className} />;
+        case 'cybersecurity-analyst': return <Shield className={className} />;
+        default: return <Briefcase className={className} />;
+    }
+};
 
 const Onboarding = () => {
     const { updateProfile } = useUser();
@@ -26,8 +29,19 @@ const Onboarding = () => {
         targetRole: '',
         currentSkills: [],
         hoursPerWeek: 10,
-        experienceLevel: 'Beginner'
+        experienceLevel: 'Beginner',
+        isParsing: false,
+        parsingSuccess: false,
+        atsPreview: null
     });
+
+    const availableSkills = useMemo(() => {
+        const skills = new Set();
+        dataset.roles.forEach(role => {
+            role.skills.forEach(skill => skills.add(skill.name));
+        });
+        return Array.from(skills).sort();
+    }, []);
 
     const handleNext = () => {
         if (currentStep < 3) {
@@ -98,18 +112,18 @@ const Onboarding = () => {
                             >
                                 <h2 className="text-2xl font-bold text-center mb-8">What is your dream job?</h2>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    {Object.keys(roleTemplates).map(role => (
+                                    {dataset.roles.map(role => (
                                         <button
-                                            key={role}
-                                            onClick={() => setFormData({ ...formData, targetRole: role })}
-                                            className={`p-6 rounded-xl border-2 transition-all text-left group ${formData.targetRole === role
-                                                    ? 'border-indigo-500 bg-indigo-500/10 shadow-[0_0_20px_rgba(79,70,229,0.2)]'
-                                                    : 'border-slate-700 bg-slate-900/50 hover:border-indigo-500/50'
+                                            key={role.id}
+                                            onClick={() => setFormData({ ...formData, targetRole: role.title })}
+                                            className={`p-6 rounded-xl border-2 transition-all text-left group ${formData.targetRole === role.title
+                                                ? 'border-indigo-500 bg-indigo-500/10 shadow-[0_0_20px_rgba(79,70,229,0.2)]'
+                                                : 'border-slate-700 bg-slate-900/50 hover:border-indigo-500/50'
                                                 }`}
                                         >
-                                            <Briefcase className={`w-8 h-8 mb-3 ${formData.targetRole === role ? 'text-indigo-400' : 'text-slate-500 group-hover:text-indigo-400'}`} />
-                                            <h3 className="text-lg font-semibold">{role}</h3>
-                                            <p className="text-sm text-slate-400 mt-1">Full stack path including frameworks and tools.</p>
+                                            <RoleIcon roleId={role.id} className={`w-8 h-8 mb-3 ${formData.targetRole === role.title ? 'text-indigo-400' : 'text-slate-500 group-hover:text-indigo-400'}`} />
+                                            <h3 className="text-lg font-semibold">{role.title}</h3>
+                                            <p className="text-sm text-slate-400 mt-1">{role.description}</p>
                                         </button>
                                     ))}
                                     <button
@@ -119,7 +133,7 @@ const Onboarding = () => {
                                     >
                                         <Compass className="w-8 h-8 mb-3 text-slate-600" />
                                         <h3 className="text-lg font-semibold text-slate-500">More Roles Coming Soon</h3>
-                                        <p className="text-sm text-slate-600 mt-1">Data Scientist, DevOps, Mobile Dev...</p>
+                                        <p className="text-sm text-slate-600 mt-1">Data Scientist, DevOps, AI Engineer...</p>
                                     </button>
                                 </div>
                             </motion.div>
@@ -134,17 +148,102 @@ const Onboarding = () => {
                                 exit={{ opacity: 0, x: -20 }}
                                 className="space-y-6"
                             >
-                                <h2 className="text-2xl font-bold text-center mb-2">What skills do you already have?</h2>
-                                <p className="text-center text-slate-400 mb-8">Select all that apply. Be honest for better results!</p>
+                                <div className="text-center">
+                                    <h2 className="text-2xl font-bold mb-1">Build Your Skill Profile</h2>
+                                    <p className="text-sm text-slate-400">Scan your resume or select your skills manually.</p>
+                                </div>
 
-                                <div className="flex flex-wrap gap-3 justify-center">
+                                {/* AI Resume Parsing Section */}
+                                <div className="bg-indigo-500/5 border-2 border-dashed border-indigo-500/20 rounded-2xl p-6 text-center group hover:bg-indigo-500/10 hover:border-indigo-500/40 transition-all cursor-pointer relative overflow-hidden">
+                                    <input
+                                        type="file"
+                                        className="absolute inset-0 opacity-0 cursor-pointer"
+                                        onChange={(e) => {
+                                            const file = e.target.files[0];
+                                            if (file) {
+                                                setFormData(prev => ({ ...prev, isParsing: true }));
+                                                setTimeout(() => {
+                                                    const mockSkills = formData.targetRole === 'Frontend Developer'
+                                                        ? ['HTML5', 'CSS3', 'JavaScript (ES6+)']
+                                                        : formData.targetRole === 'Backend Developer'
+                                                            ? ['Node.js', 'PostgreSQL']
+                                                            : ['Network Enumeration', 'Linux Internals'];
+
+                                                    const ats = calculateATSScore(mockSkills, formData.targetRole);
+
+                                                    setFormData(prev => ({
+                                                        ...prev,
+                                                        currentSkills: [...new Set([...prev.currentSkills, ...mockSkills])],
+                                                        isParsing: false,
+                                                        parsingSuccess: true,
+                                                        atsPreview: ats.score
+                                                    }));
+                                                }, 2500);
+                                            }
+                                        }}
+                                    />
+                                    <div className="space-y-3">
+                                        <div className="w-12 h-12 bg-indigo-500/20 rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
+                                            <Shield className="w-6 h-6 text-indigo-400" />
+                                        </div>
+                                        <div className="font-semibold text-indigo-300">
+                                            {formData.isParsing ? 'Calibrating Engine...' : 'Upload Resume Intelligence'}
+                                        </div>
+                                        <p className="text-[10px] text-slate-500 italic">Powered by Anti-Gravity Resume Parser</p>
+                                    </div>
+
+                                    {formData.isParsing && (
+                                        <motion.div
+                                            initial={{ x: '-100%' }}
+                                            animate={{ x: '100%' }}
+                                            transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
+                                            className="absolute bottom-0 left-0 h-1 bg-indigo-500 w-full"
+                                        />
+                                    )}
+
+                                    {formData.parsingSuccess && (
+                                        <motion.div
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            className="absolute inset-0 bg-slate-800/95 flex flex-col items-center justify-center border-2 border-emerald-500/50 rounded-2xl"
+                                        >
+                                            <div className="flex items-center gap-4 mb-4">
+                                                <div className="text-center">
+                                                    <CheckCircle className="w-10 h-10 text-emerald-500 mx-auto mb-1" />
+                                                    <p className="text-emerald-400 font-bold text-sm">Skills Extracted!</p>
+                                                </div>
+                                                <div className="w-[1px] h-10 bg-slate-700" />
+                                                <div className="text-center">
+                                                    <div className="text-2xl font-black text-indigo-400">{formData.atsPreview}%</div>
+                                                    <p className="text-[10px] text-slate-400 uppercase font-bold tracking-tighter text-center">ATS Score</p>
+                                                </div>
+                                            </div>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setFormData(prev => ({ ...prev, parsingSuccess: false, currentSkills: [], atsPreview: null }));
+                                                }}
+                                                className="text-[10px] text-slate-400 underline"
+                                            >
+                                                Undo & Select Manually
+                                            </button>
+                                        </motion.div>
+                                    )}
+                                </div>
+
+                                <div className="relative py-2">
+                                    <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-700"></div></div>
+                                    <div className="relative flex justify-center text-[10px] uppercase font-bold tracking-widest"><span className="bg-slate-800 px-2 text-slate-500">OR SELECT MANUALLY</span></div>
+                                </div>
+
+                                <div className="flex flex-wrap gap-2 justify-center max-h-[180px] overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-slate-700">
                                     {availableSkills.map(skill => (
                                         <button
                                             key={skill}
                                             onClick={() => toggleSkill(skill)}
-                                            className={`px-4 py-2 rounded-full text-sm font-medium border transition-all ${formData.currentSkills.includes(skill)
-                                                    ? 'bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-500/20'
-                                                    : 'bg-slate-800 border-slate-700 text-slate-400 hover:border-indigo-500/50 hover:text-white'
+                                            className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${formData.currentSkills.includes(skill)
+                                                ? 'bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-500/20'
+                                                : 'bg-slate-800 border-slate-700 text-slate-400 hover:border-indigo-500/50 hover:text-white'
                                                 }`}
                                         >
                                             {skill}

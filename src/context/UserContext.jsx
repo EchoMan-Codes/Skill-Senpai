@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
 import { analyzeProfile } from '../utils/aiLogic';
+import { calculateATSScore } from '../utils/atsLogic';
 
 const UserContext = createContext();
 
@@ -14,12 +14,22 @@ export const UserProvider = ({ children }) => {
         return saved ? JSON.parse(saved) : null;
     });
 
+    const [atsResult, setAtsResult] = useState(() => {
+        const saved = localStorage.getItem('atsResult');
+        return saved ? JSON.parse(saved) : null;
+    });
+
     useEffect(() => {
         if (userProfile) {
             localStorage.setItem('userProfile', JSON.stringify(userProfile));
+
             const plan = analyzeProfile(userProfile);
             setLearningPlan(plan);
             localStorage.setItem('learningPlan', JSON.stringify(plan));
+
+            const ats = calculateATSScore(userProfile.currentSkills, userProfile.targetRole);
+            setAtsResult(ats);
+            localStorage.setItem('atsResult', JSON.stringify(ats));
         }
     }, [userProfile]);
 
@@ -35,7 +45,7 @@ export const UserProvider = ({ children }) => {
     };
 
     return (
-        <UserContext.Provider value={{ userProfile, learningPlan, updateProfile, clearProfile }}>
+        <UserContext.Provider value={{ userProfile, learningPlan, atsResult, updateProfile, clearProfile }}>
             {children}
         </UserContext.Provider>
     );

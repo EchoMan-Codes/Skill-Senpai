@@ -1,0 +1,372 @@
+{
+    "roles": [
+        {
+            "id": "frontend-dev",
+            "title": "Frontend Developer",
+            "description": "Building modern, responsive, and interactive user interfaces.",
+            "skills": [
+                {
+                    "name": "HTML5",
+                    "category": "critical",
+                    "weight": 5
+                },
+                {
+                    "name": "CSS3",
+                    "category": "critical",
+                    "weight": 5
+                },
+                {
+                    "name": "JavaScript (ES6+)",
+                    "category": "critical",
+                    "weight": 10
+                },
+                {
+                    "name": "React",
+                    "category": "critical",
+                    "weight": 10
+                },
+                {
+                    "name": "Tailwind CSS",
+                    "category": "competitive",
+                    "weight": 7
+                },
+                {
+                    "name": "TypeScript",
+                    "category": "competitive",
+                    "weight": 8
+                },
+                {
+                    "name": "Vite",
+                    "category": "trending",
+                    "weight": 5
+                },
+                {
+                    "name": "Framer Motion",
+                    "category": "trending",
+                    "weight": 4
+                },
+                {
+                    "name": "Unit Testing (Jest/Vitest)",
+                    "category": "advanced",
+                    "weight": 6
+                },
+                {
+                    "name": "Performance Optimization",
+                    "category": "advanced",
+                    "weight": 7
+                }
+            ],
+            "resources": {
+                "HTML5": [
+                    {
+                        "title": "HTML5 Crash Course",
+                        "creator": "Traversy Media",
+                        "link": "https://www.youtube.com/watch?v=UB1O30fS-EE"
+                    }
+                ],
+                "CSS3": [
+                    {
+                        "title": "CSS Tutorial - Zero to Hero",
+                        "creator": "FreeCodeCamp",
+                        "link": "https://www.youtube.com/watch?v=1Rs2ND1ryYc"
+                    }
+                ],
+                "JavaScript (ES6+)": [
+                    {
+                        "title": "Namaste JavaScript",
+                        "creator": "Akshay Saini",
+                        "link": "https://www.youtube.com/playlist?list=PLlasXeu85E9cQ32gLCvAvr9vNaUccPVNP"
+                    }
+                ],
+                "React": [
+                    {
+                        "title": "React JS Crash Course",
+                        "creator": "Traversy Media",
+                        "link": "https://www.youtube.com/watch?v=w7ejDZ8SWv8"
+                    }
+                ],
+                "Tailwind CSS": [
+                    {
+                        "title": "Tailwind CSS Course",
+                        "creator": "Net Ninja",
+                        "link": "https://www.youtube.com/playlist?list=PL4cUxeGkcC9gpXORlEHjc5bSI9uwpXatl"
+                    }
+                ],
+                "TypeScript": [
+                    {
+                        "title": "TypeScript Tutorial for Beginners",
+                        "creator": "Programming with Mosh",
+                        "link": "https://www.youtube.com/watch?v=d56mG7DezGs"
+                    }
+                ],
+                "Vite": [
+                    {
+                        "title": "Vite Crash Course",
+                        "creator": "Laith Academy",
+                        "link": "https://www.youtube.com/watch?v=890aJvAb9Hw"
+                    }
+                ],
+                "Framer Motion": [
+                    {
+                        "title": "Framer Motion for Beginners",
+                        "creator": "Net Ninja",
+                        "link": "https://www.youtube.com/playlist?list=PL4cUxeGkcC9iK6QSToGZstaf_skT_Y7uD"
+                    }
+                ],
+                "Unit Testing (Jest/Vitest)": [
+                    {
+                        "title": "Vitest Crash Course",
+                        "creator": "Cosden Solutions",
+                        "link": "https://www.youtube.com/watch?v=7f-71kYhK_A"
+                    }
+                ],
+                "Performance Optimization": [
+                    {
+                        "title": "Web Performance Optimization",
+                        "creator": "Google Chrome Developers",
+                        "link": "https://www.youtube.com/playlist?list=PLNYkxOF6rcIBTSTw6vL_w790InjdK29fB"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "backend-dev",
+            "title": "Backend Developer",
+            "description": "Designing scalable server-side logic and database schemas.",
+            "skills": [
+                {
+                    "name": "Node.js",
+                    "category": "critical",
+                    "weight": 10
+                },
+                {
+                    "name": "Express.js",
+                    "category": "critical",
+                    "weight": 8
+                },
+                {
+                    "name": "PostgreSQL",
+                    "category": "critical",
+                    "weight": 9
+                },
+                {
+                    "name": "RESTful APIs",
+                    "category": "critical",
+                    "weight": 8
+                },
+                {
+                    "name": "Docker",
+                    "category": "competitive",
+                    "weight": 7
+                },
+                {
+                    "name": "Redis",
+                    "category": "competitive",
+                    "weight": 6
+                },
+                {
+                    "name": "GraphQL",
+                    "category": "trending",
+                    "weight": 5
+                },
+                {
+                    "name": "Microservices Architecture",
+                    "category": "advanced",
+                    "weight": 8
+                },
+                {
+                    "name": "CI/CD Pipelines",
+                    "category": "advanced",
+                    "weight": 7
+                }
+            ],
+            "resources": {
+                "Node.js": [
+                    {
+                        "title": "Node.js Tutorial for Beginners",
+                        "creator": "Programming with Mosh",
+                        "link": "https://www.youtube.com/watch?v=TlB_eWDSMt4"
+                    }
+                ],
+                "Express.js": [
+                    {
+                        "title": "Express.js Crash Course",
+                        "creator": "Traversy Media",
+                        "link": "https://www.youtube.com/watch?v=L72fhGm1tfE"
+                    }
+                ],
+                "PostgreSQL": [
+                    {
+                        "title": "Learn PostgreSQL",
+                        "creator": "FreeCodeCamp",
+                        "link": "https://www.youtube.com/watch?v=qw--VYLpxG4"
+                    }
+                ],
+                "RESTful APIs": [
+                    {
+                        "title": "REST API Design",
+                        "creator": "Hussein Nasser",
+                        "link": "https://www.youtube.com/watch?v=hB0mAt6A75A"
+                    }
+                ],
+                "Docker": [
+                    {
+                        "title": "Docker in 100 Seconds",
+                        "creator": "Fireship",
+                        "link": "https://www.youtube.com/watch?v=Gjnup-PuquQ"
+                    }
+                ],
+                "Redis": [
+                    {
+                        "title": "Redis Crash Course",
+                        "creator": "Traversy Media",
+                        "link": "https://www.youtube.com/watch?v=jgpVdJB2sKQ"
+                    }
+                ],
+                "GraphQL": [
+                    {
+                        "title": "GraphQL Tutorial",
+                        "creator": "Net Ninja",
+                        "link": "https://www.youtube.com/playlist?list=PL4cUxeGkcC9iK6QSToGZstaf_skT_Y7uD"
+                    }
+                ],
+                "Microservices Architecture": [
+                    {
+                        "title": "Microservices Explained",
+                        "creator": "IBM Technology",
+                        "link": "https://www.youtube.com/watch?v=CdBtNQZH8a4"
+                    }
+                ],
+                "CI/CD Pipelines": [
+                    {
+                        "title": "CI/CD Pipeline with GitHub Actions",
+                        "creator": "Kunwal Kushwaha",
+                        "link": "https://www.youtube.com/watch?v=R8_veQiYBjI"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "cybersecurity-analyst",
+            "title": "Cybersecurity Analyst",
+            "description": "Protecting systems and networks from digital attacks.",
+            "skills": [
+                {
+                    "name": "Active Directory Exploitation",
+                    "category": "critical",
+                    "weight": 10
+                },
+                {
+                    "name": "Privilege Escalation Techniques",
+                    "category": "critical",
+                    "weight": 9
+                },
+                {
+                    "name": "Network Enumeration",
+                    "category": "critical",
+                    "weight": 8
+                },
+                {
+                    "name": "Linux Internals",
+                    "category": "competitive",
+                    "weight": 7
+                },
+                {
+                    "name": "Python/Bash Scripting",
+                    "category": "competitive",
+                    "weight": 7
+                },
+                {
+                    "name": "SIEM Understanding",
+                    "category": "competitive",
+                    "weight": 6
+                },
+                {
+                    "name": "Cloud Security",
+                    "category": "trending",
+                    "weight": 8
+                },
+                {
+                    "name": "Penetration Testing Workflows",
+                    "category": "trending",
+                    "weight": 7
+                },
+                {
+                    "name": "Threat Modeling",
+                    "category": "advanced",
+                    "weight": 7
+                }
+            ],
+            "resources": {
+                "Active Directory Exploitation": [
+                    {
+                        "title": "AD Exploitation for Beginners",
+                        "creator": "The Cyber Mentor",
+                        "link": "https://www.youtube.com/watch?v=f9mGfCjC7w0"
+                    }
+                ],
+                "Privilege Escalation Techniques": [
+                    {
+                        "title": "Windows Privesc Course",
+                        "creator": "Condo",
+                        "link": "https://www.youtube.com/watch?v=8m97W_nK0is"
+                    }
+                ],
+                "Network Enumeration": [
+                    {
+                        "title": "Nmap Course for Beginners",
+                        "creator": "FreeCodeCamp",
+                        "link": "https://www.youtube.com/watch?v=4mtlerwaLoI"
+                    }
+                ],
+                "Linux Internals": [
+                    {
+                        "title": "Linux Operating System Tutorial",
+                        "creator": "Edureka",
+                        "link": "https://www.youtube.com/watch?v=V1y-mbWM3B8"
+                    }
+                ],
+                "Python/Bash Scripting": [
+                    {
+                        "title": "Python for Cybersecurity",
+                        "creator": "FreeCodeCamp",
+                        "link": "https://www.youtube.com/watch?v=3Kq1MIfTWCE"
+                    }
+                ],
+                "SIEM Understanding": [
+                    {
+                        "title": "What is SIEM?",
+                        "creator": "IBM Technology",
+                        "link": "https://www.youtube.com/watch?v=Gk74D7T_W6s"
+                    }
+                ],
+                "Cloud Security": [
+                    {
+                        "title": "AWS Cloud Security Full Course",
+                        "creator": "FreeCodeCamp",
+                        "link": "https://www.youtube.com/watch?v=p4vW933Oq0A"
+                    }
+                ],
+                "Penetration Testing Workflows": [
+                    {
+                        "title": "Penetration Testing Course",
+                        "creator": "FreeCodeCamp",
+                        "link": "https://www.youtube.com/watch?v=3Kq1MIfTWCE"
+                    }
+                ],
+                "Threat Modeling": [
+                    {
+                        "title": "Threat Modeling Explained",
+                        "creator": "IriusRisk",
+                        "link": "https://www.youtube.com/watch?v=R96uOQc0MFE"
+                    }
+                ]
+            }
+        }
+    ],
+    "metadata": {
+        "version": "1.0.0",
+        "lastUpdated": "2026-02-21",
+        "scoringAlgorithm": "weighted-average"
+    }
+}
